@@ -9,6 +9,7 @@ const cdn = {
 }
 
 module.exports = {
+    lintOnSave: false,
     publicPath: './',
     outputDir:"docs",   // 打包时生成的生产环境构建文件的目录
     productionSourceMap: process.env.NODE_ENV !== 'production',

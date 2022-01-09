@@ -8,22 +8,24 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item label="access_token">
-        <el-input v-model="form.access_token" type="password" placeholder="选填，与下方两个输入框二选一"/>
+        <el-input v-model="form.access_token" type="password" show-password placeholder="选填，与下方两个输入框二选一"/>
       </el-form-item>
-      <el-form-item label="API Key">
-        <el-input v-model="form.client_id"/>
-      </el-form-item>
-      <el-form-item label="Secret Key">
-        <el-input v-model="form.client_secret" type="password"/>
-      </el-form-item>
-      <el-form-item label="保存信息（在当前浏览器）" label-width="280px">
-        <el-switch v-model="form.save"></el-switch>
+<!--      <el-form-item label="API Key">-->
+<!--        <el-input v-model="form.client_id"/>-->
+<!--      </el-form-item>-->
+<!--      <el-form-item label="Secret Key">-->
+<!--        <el-input v-model="form.client_secret" type="password" show-password/>-->
+<!--      </el-form-item>-->
+      <el-form-item label="保存账户信息（在当前浏览器）" label-width="280px">
+        <el-switch v-model="form.save" @change="saveChange()"></el-switch>
       </el-form-item>
     </el-form>
   </div>
 </template>
 
 <script>
+import {getAccessToken, ocr} from '@/services/baidu'
+
 export default {
   name: "BaiduOcr",
   data() {
@@ -37,6 +39,61 @@ export default {
       }
     }
   },
+  created() {
+    let save = localStorage.getItem('ocr-baidu-info-save')
+    if (save === "true") {
+      this.form.save = true
+      this.form.access_token = localStorage.getItem('ocr-baidu-access_token')
+      this.form.client_id = localStorage.getItem('ocr-baidu-client_id')
+      this.form.client_secret = localStorage.getItem('ocr-baidu-client_secret')
+    }
+  },
+  methods: {
+    async ocr(imageCanvas) {
+      if (!this.form.access_token) {
+        if (!this.form.client_id || !this.form.client_secret) {
+          this.$message.error('请填写access_token，或APIKey和SecretKey')
+          return
+        }
+        await getAccessToken(this.form.client_id, this.form.client_secret).then(result => {
+          let data = result.data;
+          this.form.access_token = data.access_token
+        })
+      }
+      ocr(this.form.access_token, this.form.type, imageCanvas.toDataURL("image/jpeg", 1)).then(result => {
+        let data = result.data;
+        let text = ''
+        for (let i = 0; i < data.words_result.length; i++) {
+          text += data.words_result[i].words + '\n'
+        }
+        this.$emit('fill-ocr-result', text)
+      })
+    },
+    saveChange() {
+      if (this.form.save) {
+        localStorage.setItem('ocr-baidu-info-save', "true")
+        localStorage.setItem('ocr-baidu-access_token', this.form.access_token)
+        localStorage.setItem('ocr-baidu-client_id', this.form.client_id)
+        localStorage.setItem('ocr-baidu-client_secret', this.form.client_secret)
+      } else {
+        localStorage.setItem('ocr-baidu-info-save', "false")
+        localStorage.removeItem('ocr-baidu-access_token')
+        localStorage.removeItem('ocr-baidu-client_id')
+        localStorage.removeItem('ocr-baidu-client_secret')
+      }
+    },
+  },
+  watch: {
+    'form.access_token'() {
+      this.saveChange(this.save)
+    },
+    'form.client_id'() {
+      this.saveChange(this.save)
+    },
+    'form.client_secret'() {
+      this.saveChange(this.save)
+    }
+  }
 }
 </script>
 
