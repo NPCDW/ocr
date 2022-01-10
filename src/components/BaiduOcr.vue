@@ -60,6 +60,16 @@ export default {
           this.form.access_token = data.access_token
         })
       }
+
+      let expire = this.form.access_token.substring(0, this.form.access_token.lastIndexOf('.'))
+      expire = expire.substr(expire.lastIndexOf('.') + 1)
+      let currentTime = Date.parse(new Date()) / 1000
+      if (currentTime + "" > expire) {
+        this.$message.error('access_token已过期，请更换')
+      } else if (parseInt(expire) - currentTime < 5 * 24 * 60 * 60) {
+        this.$message.warning('access_token即将过期，请及时更换')
+      }
+
       ocr(this.form.access_token, this.form.type, imageCanvas.toDataURL("image/jpeg", 1)).then(result => {
         let data = result.data;
         let text = ''
@@ -67,6 +77,8 @@ export default {
           text += data.words_result[i].words + '\n'
         }
         this.$emit('fill-ocr-result', text)
+      }).catch(error => {
+        this.$message.error(error)
       })
     },
     saveChange() {
