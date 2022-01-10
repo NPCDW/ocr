@@ -5,6 +5,7 @@ const cdn = {
     js: [
         "//unpkg.zhimg.com/vue@2.6.11/dist/vue.min.js",
         "//unpkg.zhimg.com/element-ui@2.15.6/lib/index.js",
+        "//unpkg.zhimg.com/axios@0.24.0/dist/axios.min.js",
     ]
 }
 
@@ -25,6 +26,7 @@ module.exports = {
         externals: {
             vue: "Vue",
             "element-ui": "ELEMENT",
+            axios: "axios",
         }
     },
     pages: {
