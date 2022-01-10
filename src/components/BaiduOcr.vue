@@ -70,8 +70,12 @@ export default {
         this.$message.warning('access_token即将过期，请及时更换')
       }
 
-      ocr(this.form.access_token, this.form.type, imageCanvas.toDataURL("image/jpeg", 1)).then(result => {
+      return ocr(this.form.access_token, this.form.type, imageCanvas.toDataURL("image/jpeg", 1)).then(result => {
         let data = result.data;
+        if (data.error) {
+          this.$message.error(data.error_description)
+          return
+        }
         let text = ''
         for (let i = 0; i < data.words_result.length; i++) {
           text += data.words_result[i].words + '\n'
