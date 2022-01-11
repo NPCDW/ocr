@@ -1,7 +1,7 @@
 <template>
   <div class="container">
 <!--    <div style="color: white;background-color: #67C23A;text-align: center;font-size: 12px;padding:5px 0 5px 0;position: absolute;top:0;width: 100%">【没有保存，就没有泄露】【本模式下不会保存您的任何资源】【您现在可以断网（拔网线或开飞行模式）进行操作】</div>-->
-    <div style="color: white;background-color: #F56C6C;text-align: center;font-size: 12px;padding:5px 0 5px 0;position: absolute;top:0;width: 100%">当前模式下，服务由【百度云】提供</div>
+    <div style="color: white;background-color: #F56C6C;text-align: center;font-size: 12px;padding:5px 0 5px 0;position: absolute;top:0;width: 100%">内部人员专用，请勿输入任何账号秘钥等信息</div>
 
     <ocr />
 

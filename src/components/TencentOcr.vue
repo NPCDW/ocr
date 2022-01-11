@@ -40,14 +40,20 @@ export default {
     let save = localStorage.getItem('ocr-tencent-info-save')
     if (save === "true") {
       this.form.save = true
+      this.form.type = localStorage.getItem('ocr-tencent-type')
       this.form.SECRET_ID = localStorage.getItem('ocr-tencent-SECRET_ID')
       this.form.SECRET_KEY = localStorage.getItem('ocr-tencent-SECRET_KEY')
     }
   },
   methods: {
     ocr(imageCanvas) {
+      if (!this.form.SECRET_ID || !this.form.SECRET_KEY) {
+        this.$message.error('请填写 SECRET_ID 和 SECRET_KEY')
+        return
+      }
+
       let payload = {
-        Action: this.type,
+        Action: this.form.type,
         Version: "2018-11-19",
         Region: 'ap-beijing',
         ImageBase64: imageCanvas.toDataURL("image/jpeg", 1),
@@ -72,14 +78,14 @@ export default {
     },
     sign(payload) {
       // 密钥参数
-      const SECRET_ID = this.SECRET_ID
-      const SECRET_KEY = this.SECRET_KEY
+      const SECRET_ID = this.form.SECRET_ID
+      const SECRET_KEY = this.form.SECRET_KEY
 
       const endpoint = "ocr.tencentcloudapi.com"
       const service = "ocr"
-      const region = "ap-beijing"
-      const action = payload.action
-      const version = "2018-11-19"
+      const region = payload.Region
+      const action = payload.Action
+      const version = payload.Version
       const timestamp = Date.parse(new Date()) / 1000
       // const timestamp = 1551113065
       //时间处理, 获取世界时间日期
@@ -166,13 +172,26 @@ export default {
     saveChange() {
       if (this.form.save) {
         localStorage.setItem('ocr-tencent-info-save', "true")
+        localStorage.setItem('ocr-tencent-type', this.form.type)
         localStorage.setItem('ocr-tencent-SECRET_ID', this.form.SECRET_ID)
         localStorage.setItem('ocr-tencent-SECRET_KEY', this.form.SECRET_KEY)
       } else {
         localStorage.setItem('ocr-tencent-info-save', "false")
+        localStorage.removeItem('ocr-tencent-type')
         localStorage.removeItem('ocr-tencent-SECRET_ID')
         localStorage.removeItem('ocr-tencent-SECRET_KEY')
       }
+    },
+  },
+  watch: {
+    'form.SECRET_ID'() {
+      this.saveChange(this.form.save)
+    },
+    'form.SECRET_KEY'() {
+      this.saveChange(this.form.save)
+    },
+    'form.type'() {
+      this.saveChange(this.form.save)
     },
   }
 }
