@@ -1,7 +1,9 @@
 import axios from 'axios'
 
+const proxyBasePath = '/baiduCloud/'
+
 export function getAccessToken(client_id, client_secret) {
-    return axios.get('/baiduCloud/oauth/2.0/token', {
+    return axios.get(proxyBasePath + 'oauth/2.0/token', {
         params: {
             client_id,
             client_secret,
