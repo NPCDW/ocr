@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 export function getAccessToken(client_id, client_secret) {
-    return axios.get('https://aip.baidubce.com/oauth/2.0/token', {
+    return axios.get('/baiduCloud/oauth/2.0/token', {
         params: {
             client_id,
             client_secret,

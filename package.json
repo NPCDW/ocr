@@ -12,6 +12,7 @@
     "axios": "^0.24.0",
     "core-js": "^3.6.5",
     "element-ui": "^2.15.6",
+    "tencentcloud-sdk-nodejs": "^4.0.270",
     "vue": "^2.6.11"
   },
   "devDependencies": {
