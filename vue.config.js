@@ -34,7 +34,7 @@ module.exports = {
             entry: 'src/main.js',
             template: 'public/index.html',
             filename: 'index.html',
-            title: '文本识别',
+            title: '文本识别OCR',
             chunks: ['chunk-vendors', 'chunk-common', 'index'],
             cdn: cdn
         }
