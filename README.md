@@ -1,25 +1,20 @@
 # ocr 文本识别
 
-基于 [jsPDF](https://github.com/parallax/jsPDF) 实现的在线图片转PDF功能
+此项目对接的是腾讯云和百度云的接口，内部使用，不对外开放的原因有两个：
+1. 必须提供秘钥。需要让用户去注册腾讯云、百度云，然后再实名认证，再去领取免费资源，再去开通秘钥，写个教程的人都嫌麻烦
+2. 必须先走网站提供者的服务器。因为跨域的问题，无法直达目标服务器，必须绕路，我如果向你承诺，我不会保存你的秘钥信息，你会信吗？
 
-试一下：[https://npcdw.github.io/img2pdf/](https://npcdw.github.io/img2pdf/)
+如果你充分信任我，可以去试一下：[https://0520.site/ocr/](https://0520.site/ocr/)
 
-为什么要编写此项目
+Q：为什么不对接一个不需要服务端就可以文本识别的工具？
 
-我开办网站的时候，在最后一步，公安联网备案时，需要填写一个问卷，这个东西需要先打印出来，手填，然后（高清扫描件，生成PDF，嗯。。。联系我的人是这么说的），
-我是填完之后，直接用手机的文档模式拍了个照，然后生成的PDF，生成PDF的时候，就想自己做一个，为什么呢？隐私泄露！！！
+A：其实我一开始就是想做这样的，也找过两个项目，一个是 [tesseract.js](https://github.com/naptha/tesseract.js) ，
+一个是 [ocrad.js](https://github.com/antimatter15/ocrad.js) ， `ocrad.js` 不支持中文识别，直接就被pass掉了，
+`tesseract.js` 支持很多种语言，但是他的语言包太大了，中英文加起来有 30M 还多，如果用户只有 500KB/s 的网速，打开网页
+初次加载需要 60s，没人愿意等这么长时间的，如果用 `Electron` 做成软件，又违背了易用性的初衷
 
-没有保存，就没有泄露
+Q：为什么不自己搭一个文本识别的服务端版本提供接口，比如 `PaddleOCR` ？
 
-本站声明，绝不会保存您的任何资源
-
-打开网页后，您可以断网（拔网线或开飞行模式）进行操作
-
-|  引用库   | 目的  |
-|  ----  | ----  |
-| [jsPDF](https://github.com/parallax/jsPDF)  | 图片转pdf |
-| [FileSaver.js](https://github.com/eligrey/FileSaver.js)  | 下载文件 |
-| [ant-design-vue](https://github.com/vueComponent/ant-design-vue)  |  |
-| [vue](https://github.com/vuejs/vue)  |  |
-
-![image](https://user-images.githubusercontent.com/32638459/147846428-7816865b-db22-487b-bb15-56db7de6fc7e.png)
+A：自己搭的没有任何优势，论隐私的话，大厂难道还不如一个小作坊安全？论速度、性能、识别准确率，肯定是被完全碾压，论价格，百度云提供
+通用 `5万次/天` ，高精度 `500次/天` ，手写 `50次/天` 的调用次数，腾讯云提供通用 `1000次/月` ，高精度 `1000次/月` ，手写
+`1000次/月` 的调用次数，个人用户使用足够了
