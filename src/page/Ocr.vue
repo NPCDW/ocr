@@ -22,10 +22,10 @@
       <div style="margin: 20px;width: 460px">
         <el-tabs v-model="activeName" @tab-click="handleTabSwitch">
           <el-tab-pane label="百度云" name="baidu">
-            <baidu-ocr ref="baidu-ocr" :image-canvas.sync="srcImageCanvas" @fill-ocr-result="data => {this.ocrResult = data}" />
+            <baidu-ocr ref="baidu-ocr" @fill-ocr-result="data => {this.ocrResult = data}" />
           </el-tab-pane>
           <el-tab-pane label="腾讯云" name="tencent">
-            <tencent-ocr />
+            <tencent-ocr ref="tencent-ocr" @fill-ocr-result="data => {this.ocrResult = data}" />
           </el-tab-pane>
         </el-tabs>
       </div>
@@ -60,6 +60,12 @@ export default {
       loading: false,
     };
   },
+  created() {
+    let activeName = localStorage.getItem('ocr-cloud-type')
+    if (activeName) {
+      this.activeName = activeName
+    }
+  },
   methods: {
     textRecognition() {
       if (!this.srcImageUrl) {
@@ -71,11 +77,12 @@ export default {
         if (this.activeName === 'baidu') {
           this.$refs["baidu-ocr"].ocr(this.srcImageCanvas).finally(() => {this.loading = false})
         } else if (this.activeName === 'tencent') {
-          // this.$refs["baidu-ocr"].ocr()
+          this.$refs["tencent-ocr"].ocr(this.srcImageCanvas).finally(() => {this.loading = false})
         }
       })
     },
     handleTabSwitch() {
+      localStorage.setItem('ocr-cloud-type', this.activeName)
     },
     handleImagePaste(event) {
       if (!event.clipboardData && !event.originalEvent) {
