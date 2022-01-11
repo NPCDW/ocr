@@ -47,14 +47,14 @@ module.exports = {
                 target: process.env.VUE_APP_BAIDU_CLOUD_BASE_URL,
                 changeOrigin: true, // 跨域
                 pathRewrite: {
-                    '^/baiduCloud/': ''
+                    '^/baiduCloud/': '/'
                 }
             },
             '^/tencentCloudOcr/': {
                 target: process.env.VUE_APP_TENCENT_CLOUD_OCR_BASE_URL,
                 changeOrigin: true, // 跨域
                 pathRewrite: {
-                    '^/tencentCloudOcr/': ''
+                    '^/tencentCloudOcr/': '/'
                 }
             },
         }
