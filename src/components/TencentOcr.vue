@@ -5,6 +5,7 @@
         <el-radio-group v-model="form.type">
           <el-radio label="GeneralBasicOCR">标准</el-radio>
           <el-radio label="GeneralAccurateOCR">高精度</el-radio>
+          <el-radio label="GeneralHandwritingOCR">手写体</el-radio>
         </el-radio-group>
       </el-form-item>
             <el-form-item label="SecretId">

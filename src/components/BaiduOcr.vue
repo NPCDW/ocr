@@ -5,6 +5,7 @@
         <el-radio-group v-model="form.type">
           <el-radio label="general_basic">标准</el-radio>
           <el-radio label="accurate_basic">高精度</el-radio>
+          <el-radio label="handwriting">手写体</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item label="access_token">
