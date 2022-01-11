@@ -50,11 +50,11 @@ module.exports = {
                     '^/baiduCloud/': ''
                 }
             },
-            '^/tencentCloud/': {
+            '^/tencentCloudOcr/': {
                 target: process.env.VUE_APP_TENCENT_CLOUD_OCR_BASE_URL,
                 changeOrigin: true, // 跨域
                 pathRewrite: {
-                    '^/baiduCloud/': ''
+                    '^/tencentCloudOcr/': ''
                 }
             },
         }
