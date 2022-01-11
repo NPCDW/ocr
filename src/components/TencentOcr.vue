@@ -52,14 +52,10 @@ export default {
         return
       }
 
-      let payload = {
-        Action: this.form.type,
-        Version: "2018-11-19",
-        Region: 'ap-beijing',
+      let payloadStr = JSON.stringify({
         ImageBase64: imageCanvas.toDataURL("image/jpeg", 1),
-      }
-      let payloadStr = JSON.stringify(payload)
-      return ocr(this.sign(payload, payloadStr), payloadStr).then(response => {
+      })
+      return ocr(this.sign(payloadStr), payloadStr).then(response => {
         let data = response.data;
         if (data.Response.Error) {
           this.$message.error(data.Response.Error.Code + '\n' + data.Response.Error.Message)
@@ -67,26 +63,23 @@ export default {
         }
         let text = ''
         for (let i = 0; i < data.Response.TextDetections.length; i++) {
-          let textDetections = data.Response.TextDetections[i]
-          for (let j = 0; j < textDetections.Words.length; j++) {
-            text += textDetections.Words[j].Character + '\n'
-          }
+          text += data.Response.TextDetections[i].DetectedText + '\n'
         }
         this.$emit('fill-ocr-result', text)
       }).catch(error => {
         this.$message.error(error)
       })
     },
-    sign(payload, payloadStr) {
+    sign(payloadStr) {
       // 密钥参数
       const SECRET_ID = this.form.SECRET_ID
       const SECRET_KEY = this.form.SECRET_KEY
 
       const endpoint = "ocr.tencentcloudapi.com"
       const service = "ocr"
-      const region = payload.Region
-      const action = payload.Action
-      const version = payload.Version
+      const region = 'ap-beijing'
+      const action = this.form.type
+      const version = "2018-11-19"
       const timestamp = Date.parse(new Date()) / 1000
       // const timestamp = 1551113065
       //时间处理, 获取世界时间日期
