@@ -58,7 +58,8 @@ export default {
         Region: 'ap-beijing',
         ImageBase64: imageCanvas.toDataURL("image/jpeg", 1),
       }
-      return ocr(this.sign(payload), payload).then(response => {
+      let payloadStr = JSON.stringify(payload)
+      return ocr(this.sign(payload, payloadStr), payloadStr).then(response => {
         let data = response.data;
         if (data.Response.Error) {
           this.$message.error(data.Response.Error.Code + '\n' + data.Response.Error.Message)
@@ -76,7 +77,7 @@ export default {
         this.$message.error(error)
       })
     },
-    sign(payload) {
+    sign(payload, payloadStr) {
       // 密钥参数
       const SECRET_ID = this.form.SECRET_ID
       const SECRET_KEY = this.form.SECRET_KEY
@@ -96,11 +97,11 @@ export default {
 
       // const payload = "{\"Limit\": 1, \"Filters\": [{\"Values\": [\"\\u672a\\u547d\\u540d\"], \"Name\": \"instance-name\"}]}"
 
-      const hashedRequestPayload = this.getHash(payload);
+      const hashedRequestPayload = this.getHash(payloadStr);
       const httpRequestMethod = "POST"
       const canonicalUri = "/"
       const canonicalQueryString = ""
-      const canonicalHeaders = "content-type:application/json; charset=utf-8\n" + "host:" + endpoint + "\n"
+      const canonicalHeaders = "content-type:application/json\n" + "host:" + endpoint + "\n"
 
       const canonicalRequest = httpRequestMethod + "\n"
           + canonicalUri + "\n"
@@ -145,9 +146,9 @@ export default {
       //     + " -d '" + payload + "'"
       // console.log(curlcmd)
       return {
-        Authorization: authorization,
-        "Content-Type": "application/json; charset=utf-8",
-        Host: endpoint,
+        "Authorization": authorization,
+        "Content-Type": "application/json",
+        "Host": endpoint,
         "X-TC-Action": action,
         "X-TC-Timestamp": timestamp.toString(),
         "X-TC-Version": version,
