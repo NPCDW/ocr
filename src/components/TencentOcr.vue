@@ -38,12 +38,9 @@ export default {
     }
   },
   created() {
-    let save = localStorage.getItem('ocr-tencent-info-save')
-    if (save === "true") {
-      this.form.save = true
-      this.form.type = localStorage.getItem('ocr-tencent-type')
-      this.form.SECRET_ID = localStorage.getItem('ocr-tencent-SECRET_ID')
-      this.form.SECRET_KEY = localStorage.getItem('ocr-tencent-SECRET_KEY')
+    let info = localStorage.getItem('ocr-tencent-info')
+    if (info) {
+      this.form = JSON.parse(info)
     }
   },
   methods: {
@@ -166,15 +163,9 @@ export default {
     },
     saveChange() {
       if (this.form.save) {
-        localStorage.setItem('ocr-tencent-info-save', "true")
-        localStorage.setItem('ocr-tencent-type', this.form.type)
-        localStorage.setItem('ocr-tencent-SECRET_ID', this.form.SECRET_ID)
-        localStorage.setItem('ocr-tencent-SECRET_KEY', this.form.SECRET_KEY)
+        localStorage.setItem('ocr-tencent-info', JSON.stringify(this.form))
       } else {
-        localStorage.setItem('ocr-tencent-info-save', "false")
-        localStorage.removeItem('ocr-tencent-type')
-        localStorage.removeItem('ocr-tencent-SECRET_ID')
-        localStorage.removeItem('ocr-tencent-SECRET_KEY')
+        localStorage.removeItem('ocr-tencent-info')
       }
     },
   },
