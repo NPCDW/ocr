@@ -84,6 +84,17 @@ export default {
     handleTabSwitch() {
       localStorage.setItem('ocr-cloud-type', this.activeName)
     },
+    handleClickPaste() {
+      // 需要向用户获取剪切板权限
+      navigator.clipboard.read().then(items => {
+        let type = items[0].types[0]
+        if (type.indexOf("image") !== -1) {
+          items[0].getType(type).then(data => {
+            this.handleImage(data)
+          })
+        }
+      })
+    },
     handleImagePaste(event) {
       if (!event.clipboardData && !event.originalEvent) {
         return
