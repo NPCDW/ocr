@@ -1,8 +1,8 @@
 # ocr 文本识别
 
-此项目对接的是腾讯云和百度云的接口，内部使用，不对外开放的原因有两个：
+此项目对接的是腾讯云和百度云的接口，但无法对外开放，原因有两个：
 1. 必须提供秘钥。需要让用户去注册腾讯云、百度云，然后再实名认证，再去领取免费资源，再去开通秘钥，写个教程的人都嫌麻烦
-2. 必须先走网站提供者的服务器。因为跨域的问题，无法直达目标服务器，必须绕路，我如果向你承诺，我不会保存你的秘钥信息，你会信吗？
+2. 必须先走网站提供者的服务器。因为跨域的问题，无法直达目标服务器，必须绕路，我无法向你承诺，不会保存你的秘钥信息
 
 如果你充分信任我，可以去试一下：[https://0520.site/ocr/](https://0520.site/ocr/)
 
@@ -15,6 +15,25 @@ A：其实我一开始就是想做这样的，也找过两个项目，一个是 
 
 Q：为什么不自己搭一个文本识别的服务端版本提供接口，比如 `PaddleOCR` ？
 
-A：自己搭的没有任何优势，论隐私的话，大厂难道还不如一个小作坊安全？论速度、性能、识别准确率，肯定是被完全碾压，论价格，百度云提供
-通用 `5万次/天` ，高精度 `500次/天` ，手写 `50次/天` 的调用次数，腾讯云提供通用 `1000次/月` ，高精度 `1000次/月` ，手写
-`1000次/月` 的调用次数，个人用户使用足够了
+A：自己搭的没有任何优势，论隐私的话、速度、性能、识别准确率，肯定是被完全碾压，论价格，百度云提供通用 `5万次/天` ，
+高精度 `500次/天` ，手写 `50次/天` 的调用次数，腾讯云提供通用 `1000次/月` ，高精度 `1000次/月` ，手写`1000次/月` 的
+调用次数，个人用户使用足够了
+
+服务端 nginx 配置
+```nginx
+
+    location /baiduCloud/ {
+        proxy_pass https://aip.baidubce.com/;
+        proxy_set_header Host aip.baidubce.com;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+
+    location /tencentCloudOcr/ {
+        proxy_pass https://ocr.tencentcloudapi.com/;
+        proxy_set_header Host ocr.tencentcloudapi.com;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+
+```
